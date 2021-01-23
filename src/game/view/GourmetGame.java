@@ -1,39 +1,33 @@
-package view;
+package game.view;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import model.Dish;
-import model.DishList;
-import utilities.Message;
+import game.model.Dish;
+import game.utilities.Message;
 
 public class GourmetGame {
 	
-	private DishList pastaDishes = new DishList();
-	private DishList notPastaDishes = new DishList();
+	private final List<Dish> pastaDishes = new ArrayList<>();
+	private final List<Dish> notPastaDishes = new ArrayList<>();
 
 	public static void main(String[] args) {
 		GourmetGame gourmetGame = new GourmetGame();
-		gourmetGame.startGame();
-	}
-	
-	private void startGame() {
-		boolean play = true;
-		while (play) {
-			play = baseGame();
-		}		
+		gourmetGame.baseGame();
 	}
 
-
-	public boolean baseGame() {
+	public void baseGame() {
 		boolean correctAnswer = false;
 		int initGame = Message.initializeGame();
 		if (initGame == JOptionPane.NO_OPTION || initGame == JOptionPane.CLOSED_OPTION) {
-			return false;
+			System.exit(1);
 		}
 		if (Message.pastaQuestion() == 0) {
-			if (this.pastaDishes.getDishes().size() > 0) {
-				for (int i = 0; i < this.pastaDishes.getDishes().size(); i++) {
-					if (Message.customDish(this.pastaDishes, i) == JOptionPane.YES_OPTION) {
+			if (this.pastaDishes.size() > 0) {
+				for (Dish dish : this.pastaDishes) {
+					if (Message.customDish(dish) == JOptionPane.YES_OPTION) {
 						Message.correctAnswer();
 						correctAnswer = true;
 					} 
@@ -49,9 +43,9 @@ public class GourmetGame {
 				}				
 			}
 		} else {
-			if (this.notPastaDishes.getDishes().size() > 0) {
-				for (int i = 0; i < this.notPastaDishes.getDishes().size(); i++) {
-					if (Message.customDish(this.notPastaDishes, i) == JOptionPane.YES_OPTION) {
+			if (this.notPastaDishes.size() > 0) {
+				for (Dish dish : this.notPastaDishes) {
+					if (Message.customDish(dish) == JOptionPane.YES_OPTION) {
 						Message.correctAnswer();
 						correctAnswer = true;
 					} 
@@ -67,14 +61,14 @@ public class GourmetGame {
 				}				
 			}
 		}
-		return true;
+		baseGame();
 	}
 	
 	public void addDish(String description, String characteristic, int pastaDish) {
 		if (pastaDish == 0) {
-			this.pastaDishes.getDishes().add(new Dish(description, characteristic));
+			this.pastaDishes.add(new Dish(description, characteristic));
 		} else {
-			this.notPastaDishes.getDishes().add(new Dish(description, characteristic));
+			this.notPastaDishes.add(new Dish(description, characteristic));
 		}		
 	}
 	

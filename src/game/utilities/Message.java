@@ -1,15 +1,15 @@
-package utilities;
+package game.utilities;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
-import model.DishList;
+import game.model.Dish;
 
 public class Message {
 	
 	//Justify text of a JOptionPane
-	public static JLabel justifyTextJOptionPane(String messageContent) {
+	private static JLabel justifyTextJOptionPane(String messageContent) {
 		JLabel label = new JLabel(messageContent);
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		return label;
@@ -44,10 +44,10 @@ public class Message {
 		return JOptionPane.showInputDialog(null, description + " é _______ mas " + dish + " não.", "Complete", 3);
 	}
 
-	public static int customDish(DishList notPastaDishes, int i) {
+	public static int customDish(Dish dish) {
 		
-		if (JOptionPane.showConfirmDialog(null, "O prato que você pensou é " + notPastaDishes.getDishes().get(i).getCharacteristic() + "?", "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {			
-			return JOptionPane.showConfirmDialog(null, "O prato que você pensou é " + notPastaDishes.getDishes().get(i).getDescription() + "?", "Confirm", JOptionPane.YES_NO_OPTION); 
+		if (JOptionPane.showConfirmDialog(null, "O prato que você pensou é " + dish.getCharacteristic() + "?", "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {			
+			return JOptionPane.showConfirmDialog(null, "O prato que você pensou é " + dish.getDescription() + "?", "Confirm", JOptionPane.YES_NO_OPTION); 
 		}
 		return JOptionPane.NO_OPTION;
 	}
