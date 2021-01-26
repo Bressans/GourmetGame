@@ -20,8 +20,8 @@ public class Dish {
 
 	public void setCharacteristic(String characteristic) {
 		this.characteristic = characteristic;
-	}
-	
+	}	
+
 	public Dish(String description, String characteristic) {
 		this.description = description;
 		this.characteristic = characteristic;

@@ -4,9 +4,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
-import game.model.Dish;
-
 public class Message {
+	
+	private static final Object[] options = { "Sim", "Não"};
 	
 	//Justify text of a JOptionPane
 	private static JLabel justifyTextJOptionPane(String messageContent) {
@@ -21,11 +21,11 @@ public class Message {
 	}
 	
 	public static int pastaQuestion() {
-		return JOptionPane.showConfirmDialog(null, justifyTextJOptionPane("O prato que você pensou é massa?"), "Confirm", JOptionPane.YES_NO_OPTION, 3);
+		return JOptionPane.showOptionDialog(null, justifyTextJOptionPane("O prato que você pensou é massa?"), "Confirm", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 	}
 	
 	public static int lasanhaQuestion() {
-		return JOptionPane.showConfirmDialog(null, justifyTextJOptionPane("O prato que você pensou é lasanha?"), "Confirm", JOptionPane.YES_NO_OPTION, 3);
+		return JOptionPane.showOptionDialog(null, justifyTextJOptionPane("O prato que você pensou é lasanha?"), "Confirm", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 	}
 
 	public static void correctAnswer() {
@@ -33,7 +33,7 @@ public class Message {
 	}
 
 	public static int cakeQuestion() {
-		return JOptionPane.showConfirmDialog(null, justifyTextJOptionPane("O prato que você pensou é Bolo de Chocolate?"), "Confirm", JOptionPane.YES_NO_OPTION, 3);
+		return JOptionPane.showOptionDialog(null, justifyTextJOptionPane("O prato que você pensou é Bolo de Chocolate?"), "Confirm", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 	}
 
 	public static String giveUpQuestion() {
@@ -44,10 +44,16 @@ public class Message {
 		return JOptionPane.showInputDialog(null, description + " é _______ mas " + dish + " não.", "Complete", 3);
 	}
 
-	public static int customDish(Dish dish) {
-		
-		if (JOptionPane.showConfirmDialog(null, "O prato que você pensou é " + dish.getCharacteristic() + "?", "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {			
-			return JOptionPane.showConfirmDialog(null, "O prato que você pensou é " + dish.getDescription() + "?", "Confirm", JOptionPane.YES_NO_OPTION); 
+	public static int customDish(String description) {				
+		if (JOptionPane.showOptionDialog(null, "O prato que você pensou é " + description + "?", "Confirm", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]) == JOptionPane.YES_OPTION) {
+			return JOptionPane.YES_OPTION;				 
+		} 
+		return JOptionPane.NO_OPTION;
+	}
+	
+	public static int validateCharacteristic(String characteristic) {
+		if (JOptionPane.showOptionDialog(null, "O prato que você pensou é " + characteristic + "?", "Confirm", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]) == JOptionPane.YES_OPTION) {		
+			return JOptionPane.YES_OPTION;
 		}
 		return JOptionPane.NO_OPTION;
 	}

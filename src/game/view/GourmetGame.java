@@ -6,12 +6,13 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import game.model.Dish;
+import game.model.DishMap;
 import game.utilities.Message;
 
 public class GourmetGame {
 	
-	private final List<Dish> pastaDishes = new ArrayList<>();
-	private final List<Dish> notPastaDishes = new ArrayList<>();
+	private final List<DishMap> dishMap = new ArrayList<>();
+	private final List<DishMap> dishMapCake = new ArrayList<>();
 
 	public static void main(String[] args) {
 		GourmetGame gourmetGame = new GourmetGame();
@@ -19,57 +20,70 @@ public class GourmetGame {
 	}
 
 	public void baseGame() {
-		boolean correctAnswer = false;
 		int initGame = Message.initializeGame();
 		if (initGame == JOptionPane.NO_OPTION || initGame == JOptionPane.CLOSED_OPTION) {
 			System.exit(1);
 		}
-		if (Message.pastaQuestion() == 0) {
-			if (this.pastaDishes.size() > 0) {
-				for (Dish dish : this.pastaDishes) {
-					if (Message.customDish(dish) == JOptionPane.YES_OPTION) {
-						Message.correctAnswer();
-						correctAnswer = true;
-					} 
-				}
-			}
-			if (!correctAnswer) {
+		if (Message.pastaQuestion() == 0) {			
+			if (!validateDish(this.dishMap)) { 
 				if (Message.lasanhaQuestion() == 0) {
 					Message.correctAnswer();
 				} else {
-					String description = Message.giveUpQuestion();
-					String characteristic = Message.completeMessage(description, "Lasanha");
-					addDish(description, characteristic, 0);
-				}				
+					addDish("Lasanha", this.dishMap);
+				}	
 			}
 		} else {
-			if (this.notPastaDishes.size() > 0) {
-				for (Dish dish : this.notPastaDishes) {
-					if (Message.customDish(dish) == JOptionPane.YES_OPTION) {
-						Message.correctAnswer();
-						correctAnswer = true;
-					} 
-				}
-			}
-			if (!correctAnswer) {
+			if (!validateDish(this.dishMapCake)) { 
 				if (Message.cakeQuestion() == 0) {
 					Message.correctAnswer();
 				} else {
-					String description = Message.giveUpQuestion();
-					String characteristic = Message.completeMessage(description, "Bolo de Chocolate");
-					addDish(description, characteristic, 1);
-				}				
+					addDish("Bolo de Chocolate", this.dishMapCake);
+				}	
 			}
 		}
 		baseGame();
 	}
 	
-	public void addDish(String description, String characteristic, int pastaDish) {
-		if (pastaDish == 0) {
-			this.pastaDishes.add(new Dish(description, characteristic));
-		} else {
-			this.notPastaDishes.add(new Dish(description, characteristic));
-		}		
+	private boolean validateDish(List<DishMap> dishList) {
+		for (DishMap dishMap : dishList) {
+			int result = Message.validateCharacteristic(dishMap.getDish().getCharacteristic());
+			if (result == JOptionPane.YES_OPTION) {
+				if (dishMap.getDishMap() == null) {
+					if (Message.customDish(dishMap.getDish().getDescription()) == JOptionPane.YES_OPTION) {
+						Message.correctAnswer();
+						return true;
+					} else {
+						List<DishMap> newDishList = new ArrayList<>();
+						addDish(dishMap.getDish().getDescription(), newDishList);
+						dishMap.setDishMap(newDishList);						
+						return true;
+					}
+				} else {
+					boolean validatedDish = validateDish(dishMap.getDishMap());			
+					if (validatedDish) {
+						return true;
+					} else {
+						if (Message.customDish(dishMap.getDish().getDescription()) == JOptionPane.YES_OPTION) {
+							Message.correctAnswer();
+							return true;
+						} else {
+							List<DishMap> newDishMap = dishMap.getDishMap();
+							addDish(dishMap.getDish().getDescription(), newDishMap);
+							dishMap.setDishMap(newDishMap);		
+							return true;
+						}
+					}
+				}
+			} 
+		} 
+		return false;
 	}
+
+	public void addDish(String previousDescription, List<DishMap> newDishList) {
+		String description = Message.giveUpQuestion();
+		String characteristic = Message.completeMessage(description, previousDescription);
+		newDishList.add(new DishMap(new Dish(description, characteristic)));
+	}
+	
 	
 }
